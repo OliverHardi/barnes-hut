@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [  // build glad separately, comment out if it's already been built
+        {
+            "label": "Build glad.o",
+            "type": "shell",
+            "command": "/usr/bin/clang",
+            "args": [
+                "-c",
+                "include/glad/glad.c",
+                "-I${workspaceFolder}/include",
+                "-o",
+                "glad.o"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Build with GLFW",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-std=c++17",
+                "src/*.cpp",
+                "glad.o",
+                "-I${workspaceFolder}/include",
+                "-Llibs",
+                "${workspaceFolder}/libs/libglfw.3.dylib",
+                "-o", "main",
+                "-framework", "Cocoa",
+                "-framework", "OpenGL",
+                "-framework", "IOKit",
+                "-Wl,-rpath,@executable_path/libs"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            // "dependsOn": ["Build glad.o"], // ensure glad is built
+            "problemMatcher": ["$gcc"],
+        }
+    ]
+}
